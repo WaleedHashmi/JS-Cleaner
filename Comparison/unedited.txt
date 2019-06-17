@@ -1,7 +1,6 @@
-<html class="js" lang="en-us"><head>
+<html class="noJS no-js" lang="en-us"><head>
 <meta charset="utf-8"/>
 <title>Federal Aviation Administration</title>
-<script>document.documentElement.className='js';</script>
 <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.min.css" integrity="sha256-vpKTO4Ob1M4bZ8RAvZvYMtinMz1XjH0QYdAO2861V9M=" rel="stylesheet"/>
 <link href="/templates/4/assets/css/main.css" rel="stylesheet"/>
 <link href="/favicon.png" rel="icon"/>
@@ -46,7 +45,7 @@
 			width: 15px;
 		}
 	</style>
-<script>bazadebezolkohpepadr="1192754905"</script><script defer="" src="https://www.faa.gov/akam/10/4717fd39" type="text/javascript"></script><script data-role="gateway" data-vendor="fs" src="https://gateway.foresee.com/sites/faa/production/gateway.min.js"></script></head>
+<script defer="" src="https://www.faa.gov/akam/10/4717fd39" type="text/javascript"></script><script data-role="gateway" data-vendor="fs" src="https://gateway.foresee.com/sites/faa/production/gateway.min.js"></script></head>
 <body>
 <a class="visuallyHidden focusable" href="#content">Skip to page content</a>
 <nav class="modeRibbon" id="modeRibbon">
