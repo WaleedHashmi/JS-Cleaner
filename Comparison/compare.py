@@ -1,3 +1,15 @@
+#########################################################
+#########################################################
+#####                                               #####
+#####   Compares screenshots in a pixel by          #####
+#####   pixel  comparison and can not be used       #####
+#####   with the cloner as different versions of    #####
+#####   the page have slight movements that marsks  #####
+#####   seemingly similar images as different.      #####
+#####                                               #####
+#########################################################
+#########################################################
+
 import cv2, os, numpy
 
 
@@ -43,7 +55,6 @@ imageMatrix = []
 
 websites = RemoveTempFolders(websites)
 
-
 for website in websites:
     # List and Normalise
     varients = os.listdir("ss/"+website)
@@ -65,7 +76,6 @@ for website in websites:
         paths = ["ss/" + website + "/0/" + image,
                  "ss/" + website + "/1/" + image,
                  "ss/" + website + "/2/" + image]
-
 
         for i in varients[1:]:
             i = int(i)
