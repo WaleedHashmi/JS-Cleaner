@@ -15,7 +15,6 @@ def RemoveTempFolders(someList):
     return someList
 
 def normalise(img, background = [255,255,255]):
-
     # change background to black(0)
     # transorm the rest of the pixels to
     # monotone for easier comparison later
@@ -33,10 +32,10 @@ def normalise(img, background = [255,255,255]):
                 img[i][j] = white
                 k+=1
     print (k,l)
-    return (img)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img
 
 def imageCompare(one, two):
-
     # img1 is the core image
     # img2 will be broken down into components
     # then the components will be checked against img1
@@ -48,17 +47,33 @@ def imageCompare(one, two):
     # img1 = normalise(img1)
     # print ("Done")
 
-    print ("Normalising Image 2:", end = "")
-    img2 = normalise(img2)
-    print ("Done")
+    print ("Normalising Image 2")
+    img2Mask = normalise(img2)
+    cv2.imwrite( "img2mask.jpg", img2)
 
-    print (img2[0])
+    # print ("Dilating Image 2")
+    # img2Mask_dilated = cv2.dilate(img2Mask, kernel = np.ones((5,5),np.uint8))
+    # cv2.imwrite( "img2Mask_dilated.jpg", img2Mask_dilated)
+
+    connectivity = 4
+    output = cv2.connectedComponentsWithStats(img2Mask,connectivity)
+    nLabels = output[0]
+    labels = output[1]
+    stats = output[2]
+    centroids = output[3]
+
+    print (nLabels)
+    print (labels)
+    print (centroids)
+    print (stats)
+
+    # print (output)
 
     # cv2.imshow('image',img2)
     # a = input ("close?")
     # cv2.destroyAllWindows()
 
-    cv2.imwrite( "img2.jpg", img2 )
+    cv2.imwrite( "img2mask.jpg", img2 )
 
 
 
