@@ -10,7 +10,6 @@ import numpy as np
 import skimage
 from matplotlib import pyplot as plt
 
-
 def RemoveTempFolders(someList):
     for item in someList:
         if item[0] == ".":
@@ -38,13 +37,12 @@ def normalise(img, background = [255,255,255]):
     return img
 
 
-def breakIntoComponents (img = "ss/faa-gov/0/screenshotnav-class-hNav.png"):
-    img0 = cv2.imread (img)
-
-    print ("Normalising Image: \t", img)
+def breakIntoComponents (img0):
+    print ("Normalising Image: \t")
     img0_norm = normalise(img0)
 
-    img0_dil = cv2.dilate (img0_norm,np.ones((15, 15)))
+    # dilate components: this will join the nearby components for them to be grouped
+    img0_dil = cv2.dilate (img0_norm,np.ones((20, 20)))
 
     labels, markers = cv2.connectedComponents(img0_dil.astype(np.uint8),connectivity=8)
 
@@ -52,7 +50,7 @@ def breakIntoComponents (img = "ss/faa-gov/0/screenshotnav-class-hNav.png"):
 
     for i in range (labels):
         component = np.where(img0_mask==i)[0]
-        print ("Saving Comp", i)
+        print ("Saving Comp #", i)
         saveComponent(component,markers.shape,i)
 
 def removeLeadingZeros(mask):
@@ -82,37 +80,40 @@ def crop (mask):
     return mask
 
 def saveComponent (comp,shape,label):
+    nChannels = 3 #RGB
     sizeForFlatten = shape[0]*shape[1]
+    originalImage = imgOrg.flatten().reshape(sizeForFlatten , nChannels)
 
-    mask = np.zeros(sizeForFlatten)
+    mask = np.zeros(sizeForFlatten * nChannels).reshape(sizeForFlatten , nChannels)
     for c in comp:
-        mask[c] = 1
+        mask[c] = originalImage[c]
 
     # mask = cv2.erode(mask, np.ones((50, 50)))
 
-    mask = mask.reshape(shape[0],shape[1])
+    mask = mask.reshape(shape[0],shape[1],nChannels)
 
-    mask = crop(mask)
+    # mask = crop(mask)
 
     if len(mask.flatten()) < 20:
         print ("component too small")
     else:
         print ("writing image")
 
-        ##### Converting to three channel 3d array to save with cv2
-        mask_write = mask.tolist()
+        # ##### Converting to three channel 3d array to save with cv2
+        # mask_write = mask.tolist()
+        #
+        # for i in range(len(mask_write)):
+        #     for j in range(len(mask_write[0])):
+        #         if mask_write[i][j] == 1:
+        #             mask_write[i][j] = [255,255,255]
+        #         else:
+        #             mask_write[i][j] = [0,0,0]
+        #
+        # mask_write = np.array (mask_write)
 
-        for i in range(len(mask_write)):
-            for j in range(len(mask_write[0])):
-                if mask_write[i][j] == 1:
-                    mask_write[i][j] = [255,255,255]
-                else:
-                    mask_write[i][j] = [0,0,0]
-
-        mask_write = np.array (mask_write)
-
-        cv2.imwrite("1/"+str(label)+".jpg", mask_write)
+        cv2.imwrite("1/"+str(label)+".jpg", mask)
 
 
 
-breakIntoComponents("ss/faa-gov/0/screenshotnav-class-hNav.png")
+imgOrg = cv2.imread ("ss/faa-gov/0/screenshotnav-class-hNav.png")
+breakIntoComponents(imgOrg)
