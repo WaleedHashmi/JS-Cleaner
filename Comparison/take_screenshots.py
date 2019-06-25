@@ -6,12 +6,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import cv2
 
 
-# file with additional functions
-import functions
-
-
 # Importing URLs
-URLs = ['https://www.faa.gov']
+URLs = ['https://www.priceline.com']
 varients = ["","/index55.html","/index60.html"]
 
 for link in URLs:
