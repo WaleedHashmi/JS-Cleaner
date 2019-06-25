@@ -8,6 +8,7 @@
 import cv2, os
 import numpy as np
 import skimage
+import scipy.misc
 from matplotlib import pyplot as plt
 
 def RemoveTempFolders(someList):
@@ -40,15 +41,20 @@ def normalise(img, background = [255,255,255]):
 def breakIntoComponents (img0):
     print ("Normalising Image: \t")
     img0_norm = normalise(img0)
+    # img0_norm = cv2.adaptiveThreshold(img0,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,115,1)
+    # _, img0_norm = cv2.threshold(img0, 155, 255, cv2.THRESH_TOZERO_INV)
+    # cv2.imwrite("123.jpg", img0_norm)
 
     # dilate components: this will join the nearby components for them to be grouped
-    img0_dil = cv2.dilate (img0_norm,np.ones((20, 20)))
+    img0_dil = cv2.dilate (img0_norm,np.ones((20,20)))
 
     labels, markers = cv2.connectedComponents(img0_dil.astype(np.uint8),connectivity=8)
 
+    print (labels)
+
     img0_mask = skimage.measure.label(markers, background = 0).flatten()
 
-    for i in range (labels):
+    for i in range (1,labels,1):
         component = np.where(img0_mask==i)[0]
         print ("Saving Comp #", i)
         saveComponent(component,markers.shape,i)
@@ -69,7 +75,7 @@ def removeTailingZeros(mask):
             continue
     return mask
 
-def crop (mask):
+def crop_binary (mask):
     print ("Cropping")
     mask = removeLeadingZeros(mask)
     mask = removeTailingZeros(mask)
@@ -78,6 +84,25 @@ def crop (mask):
     mask = removeTailingZeros(mask)
     mask = np.transpose(mask)
     return mask
+
+def crop(mask):
+    cv2.imwrite ('temp.jpg', mask)
+    img = cv2.imread('temp.jpg')
+
+    # print (img.shape,img1.shape)
+
+    # img = cv2.cvtColor(img1,cv2.COLOR_GRAY2BGR)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    _,thresh = cv2.threshold(gray,1,255,cv2.THRESH_BINARY)
+
+
+    contours = [cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)]
+    cnt = contours[0][0]
+    x,y,w,h = cv2.boundingRect(cnt)
+
+    crop = img[y:y+h,x:x+w]
+
+    return crop
 
 def saveComponent (comp,shape,label):
     nChannels = 3 #RGB
@@ -92,7 +117,7 @@ def saveComponent (comp,shape,label):
 
     mask = mask.reshape(shape[0],shape[1],nChannels)
 
-    # mask = crop(mask)
+    mask = crop(mask)
 
     if len(mask.flatten()) < 20:
         print ("component too small")
@@ -114,6 +139,6 @@ def saveComponent (comp,shape,label):
         cv2.imwrite("1/"+str(label)+".jpg", mask)
 
 
-
-imgOrg = cv2.imread ("ss/faa-gov/0/screenshotnav-class-hNav.png")
+loc = "ss/faa-gov/0/screenshotnav-class-hNav.png"
+imgOrg = cv2.imread (loc)
 breakIntoComponents(imgOrg)
