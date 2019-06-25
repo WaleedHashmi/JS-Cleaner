@@ -11,6 +11,40 @@ import skimage
 import scipy.misc
 from matplotlib import pyplot as plt
 
+
+def makeFolders():
+    websites = os.listdir("ss")
+    websites = RemoveTempFolders(websites)
+    for website in websites:
+        varients = os.listdir("ss/"+website)
+        varients = RemoveTempFolders(varients)
+        imageMatrix = []
+        for varient in varients:
+            imageMatrix.append([])
+            images = os.listdir("ss/"+website+"/"+varient)
+            images = RemoveTempFolders(images)
+            for image in images:
+                imageMatrix[int(varient)].append(image)
+
+        for image in imageMatrix[0]:
+                paths = ["ss/" + website + "/0/" + image,
+                         "ss/" + website + "/1/" + image,
+                         "ss/" + website + "/2/" + image]
+
+                for loc in paths:
+                        try:
+                            os.mkdir("components/" + loc.split("/")[1])
+                        except:
+                            pass
+                        try:
+                            os.mkdir("components/" + loc.split("/")[1] + "/" + loc.split("/")[-1].split(".")[0])
+                        except:
+                            pass
+                        try:
+                            os.mkdir("components/" + loc.split("/")[1] + "/" + loc.split("/")[-1].split(".")[0] + "/" + loc.split("/")[-2])
+                        except:
+                            pass
+
 def RemoveTempFolders(someList):
     for item in someList:
         if item[0] == ".":
@@ -39,7 +73,7 @@ def normalise(img, background = [255,255,255]):
 
 
 def breakIntoComponents (img0):
-    print ("Normalising Image: \t")
+    print ("Normalising Image \t")
     img0_norm = normalise(img0)
     # img0_norm = cv2.adaptiveThreshold(img0,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,115,1)
     # _, img0_norm = cv2.threshold(img0, 155, 255, cv2.THRESH_TOZERO_INV)
@@ -56,7 +90,7 @@ def breakIntoComponents (img0):
 
     for i in range (1,labels,1):
         component = np.where(img0_mask==i)[0]
-        print ("Saving Comp #", i)
+        # print ("Saving Comp #", i)
         saveComponent(component,markers.shape,i)
 
 def removeLeadingZeros(mask):
@@ -88,6 +122,7 @@ def crop_binary (mask):
 def crop(mask):
     cv2.imwrite ('temp.jpg', mask)
     img = cv2.imread('temp.jpg')
+    os.remove('temp.jpg')
 
     # print (img.shape,img1.shape)
 
@@ -122,23 +157,55 @@ def saveComponent (comp,shape,label):
     if len(mask.flatten()) < 20:
         print ("component too small")
     else:
-        print ("writing image")
+        # print ("writing image")
+        save_dir = ("components/" + loc.split("/")[1] + "/" +  loc.split("/")[-1].split(".")[0] + "/" + loc.split("/")[-2] + "/")
+        cv2.imwrite(save_dir + str(label) + ".jpg" , mask)
 
-        # ##### Converting to three channel 3d array to save with cv2
-        # mask_write = mask.tolist()
-        #
-        # for i in range(len(mask_write)):
-        #     for j in range(len(mask_write[0])):
-        #         if mask_write[i][j] == 1:
-        #             mask_write[i][j] = [255,255,255]
-        #         else:
-        #             mask_write[i][j] = [0,0,0]
-        #
-        # mask_write = np.array (mask_write)
+websites = os.listdir("ss")
+imageMatrix = []
 
-        cv2.imwrite("1/"+str(label)+".jpg", mask)
+websites = RemoveTempFolders(websites)
+
+makeFolders()
+i=0
+for website in websites:
+    # List and Normalise
+    varients = os.listdir("ss/"+website)
+    varients = RemoveTempFolders(varients)
+
+    for varient in varients:
+        imageMatrix.append([])
+        # List and Normalise
+        images = os.listdir("ss/"+website+"/"+varient)
+        images = RemoveTempFolders(images)
+
+        for image in images:
+            imageMatrix[int(varient)].append(image)
+
+    diffMatrix = [imageMatrix[0],[],[]]
+
+    j = 0
+    for image in imageMatrix[0]:
+
+        i += 1
+        print (i)
+        if i < 9: continue
+
+        paths = ["ss/" + website + "/0/" + image,
+                 "ss/" + website + "/1/" + image,
+                 "ss/" + website + "/2/" + image]
+
+        print (paths)
+
+        for loc in paths:
+                if os.path.isfile(loc):
+                    imgOrg = cv2.imread (loc)
+                    breakIntoComponents(imgOrg)
 
 
-loc = "ss/faa-gov/0/screenshotnav-class-hNav.png"
-imgOrg = cv2.imread (loc)
-breakIntoComponents(imgOrg)
+# breakIntoComponents("ss/faa-gov/0/screenshotnav-class-hNav.png")
+
+# loc = "ss/faa-gov/1/screenshotul-id-homepageFeaturedTopics.png"
+# imgOrg = cv2.imread (loc)
+# breakIntoComponents(imgOrg)
+# breakIntoComponents('ss/faa-gov/0/screenshotul-id-homepageFeaturedTopics.png')
