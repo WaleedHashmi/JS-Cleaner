@@ -187,9 +187,9 @@ for website in websites:
     j = 0
     for image in imageMatrix[0]:
 
-        i += 1
-        print (i)
-        if i < 9: continue
+        # i += 1
+        # print (i)
+        # if i < 9: continue
 
         paths = ["ss/" + website + "/0/" + image,
                  "ss/" + website + "/1/" + image,
