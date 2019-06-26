@@ -7,7 +7,29 @@ import cv2
 
 
 # Importing URLs
-URLs = ['https://www.priceline.com']
+URLs = ["https://www.ets.org",
+        "https://www.irs.gov",
+        "https://www.xfinity.com",
+        "https://www.americanexpress.com",
+        "https://www.hdfcbank.com",
+        "https://www.census.gov",
+        "https://androidforum.cz",
+        "https://www.netdoctor.co.uk",
+        "https://www.pinkbike.com",
+        "https://www.head-fi.org"
+        "https://www.military.com"
+        "https://www.metafilter.,com"
+        "https://www.nrl.com",
+        "https://www.prevention.com,"
+        "https://www.nascar.,com"
+        "https://www.elle.com",
+        "https://phys.org",
+        "https://www.dslrepor,ts.com"
+        "https://www.abc.,net.au"
+        "https://www.voanews.com",
+        "https://www.ted.com",
+        "https://uncrate.com",]
+
 varients = ["","/index55.html","/index60.html"]
 
 for link in URLs:

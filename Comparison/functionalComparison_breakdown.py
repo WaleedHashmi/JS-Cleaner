@@ -16,6 +16,8 @@ def makeFolders():
     websites = os.listdir("ss")
     websites = RemoveTempFolders(websites)
     for website in websites:
+        if website == "faa-gov": continue
+        print (website)
         varients = os.listdir("ss/"+website)
         varients = RemoveTempFolders(varients)
         imageMatrix = []
