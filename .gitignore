@@ -3,4 +3,6 @@ ss
 1
 Comparison/*.ipynb
 Comparison/components
+Comparison/git_ignore
 scores
+*.jpg
