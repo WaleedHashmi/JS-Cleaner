@@ -5,7 +5,6 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 import cv2
 
-
 # Importing URLs
 URLs = ["https://www.head-fi.org",
         "https://www.military.com",
