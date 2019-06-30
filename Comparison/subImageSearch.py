@@ -22,20 +22,5 @@ def find_image(im, tpl):
         if np.all(im[y+1:y+h+1, x+1:x+w+1] == tpl):
             return (y+1, x+1)
 
-    return False 
+    return False
     raise Exception("Image not found")
-
-
-# img0 = cv2.imread ("/Users/waleed/Desktop/JS-Reseach/Comparison/ss/faa-gov/2/screenshotdiv-id-faaModal.png")
-# img1 = cv2.imread ("/Users/waleed/Desktop/screenshoth2-class-visuallyHidden.png")
-#
-# print (img0)
-# print (img1)
-#
-# result = find_image (img0,img1)
-# print (result)
-# # cv2.rectangle(img0, (result[0],result[1]), (result[0]+img1.shape[0], result[1]+img1.shape[1]), (255,0,0), 2)
-#
-# cv2.rectangle(img0, (result[1],result[0]),(result[1]+img1.shape[1],result[0]+img1.shape[0]) , (255,0,0), 2)
-#
-# cv2.imwrite("1.jpg", img0)

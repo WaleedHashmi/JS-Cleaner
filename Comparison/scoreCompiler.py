@@ -29,18 +29,11 @@ for website in websites: filebyWesbsite.append([])
 files = os.listdir("scores")
 files = RemoveTempFolders(files)
 
-# print (files)
-
-# bloodyelbow-com_screenshot_outbrain_widget_0_varient0
 
 for file in files:
     ind = websites.index(file.split("_")[0])
     filebyWesbsite[ind].append(file)
 
-# for website in websites: #in websites:
-#     classes = os.listdir("components/"+website)
-#     classes = RemoveTempFolders(classes)
-#
 
 varients = "varient1.csv","varient2.csv","varient3.csv"
 scores = []
